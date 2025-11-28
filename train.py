@@ -19,6 +19,12 @@ import joblib
 import json
 import warnings
 warnings.filterwarnings('ignore')
+import os
+import mlflow
+# Set MLflow tracking URI
+if not os.path.exists('mlruns'):
+    os.makedirs('mlruns')
+mlflow.set_tracking_uri('file:./mlruns')
 
 def load_and_prepare_data():
     """Load processed dataset and prepare features"""
