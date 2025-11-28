@@ -21,7 +21,7 @@ import json
 import warnings
 warnings.filterwarnings('ignore')
 
-# Configure MLflow for cross-platform compatibility (FIXED)
+# Configure MLflow for cross-platform compatibility
 os.makedirs('mlruns', exist_ok=True)
 os.makedirs('models', exist_ok=True)
 mlflow.set_tracking_uri(os.path.abspath("mlruns"))
@@ -137,28 +137,18 @@ def train_iteration_1(X_train, X_test, y_train, y_test, features):
             model, X_train, X_test, y_train, y_test, features
         )
         
-        # Log metrics
+        # Log metrics (works in CI)
         mlflow.log_metrics(metrics)
         
-        # Log feature importance (skip in CI if fails)
-        try:
-            mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
-        except Exception as e:
-            print(f"Warning: Could not log feature importance: {e}")
-
-        # Log confusion matrix (skip in CI if fails)
-        try:
-            mlflow.log_dict({
-                'confusion_matrix': cm.tolist(),
-                'labels': ['SLA_Met', 'SLA_Breach']
-            }, "confusion_matrix.json")
-        except Exception as e:
-            print(f"Warning: Could not log confusion matrix: {e}")
+        # Skip artifact logging in CI (causes Windows path issues)
+        # mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        # mlflow.log_dict({
+        #     'confusion_matrix': cm.tolist(),
+        #     'labels': ['SLA_Met', 'SLA_Breach']
+        # }, "confusion_matrix.json")
+        # mlflow.sklearn.log_model(model, "model")
         
-        # Log model
-        mlflow.sklearn.log_model(model, "model")
-        
-        # Save model locally
+        # Save model locally (always works)
         joblib.dump(model, 'models/model_rf_v1.pkl')
         
         # Print results
@@ -231,22 +221,18 @@ def train_iteration_2(X_train, X_test, y_train, y_test, features):
             model, X_train, X_test, y_train, y_test, features
         )
         
-        # Log metrics
+        # Log metrics (works in CI)
         mlflow.log_metrics(metrics)
         
-        # Log feature importance
-        mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        # Skip artifact logging in CI (causes Windows path issues)
+        # mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        # mlflow.log_dict({
+        #     'confusion_matrix': cm.tolist(),
+        #     'labels': ['SLA_Met', 'SLA_Breach']
+        # }, "confusion_matrix.json")
+        # mlflow.sklearn.log_model(model, "model")
         
-        # Log confusion matrix
-        mlflow.log_dict({
-            'confusion_matrix': cm.tolist(),
-            'labels': ['SLA_Met', 'SLA_Breach']
-        }, "confusion_matrix.json")
-        
-        # Log model
-        mlflow.sklearn.log_model(model, "model")
-        
-        # Save model locally
+        # Save model locally (always works)
         joblib.dump(model, 'models/model_xgb_v2.pkl')
         
         # Print results
