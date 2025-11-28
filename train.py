@@ -140,14 +140,20 @@ def train_iteration_1(X_train, X_test, y_train, y_test, features):
         # Log metrics
         mlflow.log_metrics(metrics)
         
-        # Log feature importance
-        mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
-        
-        # Log confusion matrix
-        mlflow.log_dict({
-            'confusion_matrix': cm.tolist(),
-            'labels': ['SLA_Met', 'SLA_Breach']
-        }, "confusion_matrix.json")
+        # Log feature importance (skip in CI if fails)
+        try:
+            mlflow.log_dict(feature_importance.to_dict(), "feature_importance.json")
+        except Exception as e:
+            print(f"Warning: Could not log feature importance: {e}")
+
+        # Log confusion matrix (skip in CI if fails)
+        try:
+            mlflow.log_dict({
+                'confusion_matrix': cm.tolist(),
+                'labels': ['SLA_Met', 'SLA_Breach']
+            }, "confusion_matrix.json")
+        except Exception as e:
+            print(f"Warning: Could not log confusion matrix: {e}")
         
         # Log model
         mlflow.sklearn.log_model(model, "model")
