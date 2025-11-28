@@ -5,6 +5,7 @@ Trains two iterations of models and tracks experiments
 
 import pandas as pd
 import numpy as np
+import os
 import mlflow
 import mlflow.sklearn
 from sklearn.model_selection import train_test_split, cross_val_score
@@ -19,11 +20,10 @@ import joblib
 import json
 import warnings
 warnings.filterwarnings('ignore')
-import os
-import mlflow
-# Set MLflow tracking URI
-if not os.path.exists('mlruns'):
-    os.makedirs('mlruns')
+
+# Configure MLflow for cross-platform compatibility
+os.makedirs('mlruns', exist_ok=True)
+os.makedirs('models', exist_ok=True)
 mlflow.set_tracking_uri('file:./mlruns')
 
 def load_and_prepare_data():
