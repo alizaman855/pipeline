@@ -21,10 +21,10 @@ import json
 import warnings
 warnings.filterwarnings('ignore')
 
-# Configure MLflow for cross-platform compatibility
+# Configure MLflow for cross-platform compatibility (FIXED)
 os.makedirs('mlruns', exist_ok=True)
 os.makedirs('models', exist_ok=True)
-mlflow.set_tracking_uri('file:./mlruns')
+mlflow.set_tracking_uri(os.path.abspath("mlruns"))
 
 def load_and_prepare_data():
     """Load processed dataset and prepare features"""
@@ -300,10 +300,6 @@ def compare_iterations(metrics_v1, metrics_v2):
 
 def main():
     """Main training pipeline"""
-    
-    # Create models directory
-    import os
-    os.makedirs('models', exist_ok=True)
     
     # Set MLflow experiment
     mlflow.set_experiment("Incident_SLA_Breach_Prediction")
