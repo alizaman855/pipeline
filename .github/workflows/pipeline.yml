@@ -328,19 +328,21 @@ jobs:
         
         # Deploy new container
         az container create \
-          --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
-          --name ${{ env.CONTAINER_NAME }} \
-          --image mlopsincidentacr.azurecr.io/incident-sla-api:latest \
-          --registry-login-server mlopsincidentacr.azurecr.io \
-          --registry-username $ACR_USERNAME \
-          --registry-password $ACR_PASSWORD \
-          --dns-name-label incident-sla-api-${{ github.run_number }} \
-          --ports 8000 \
-          --cpu 1 \
-          --memory 2 \
-          --environment-variables ENVIRONMENT=production \
-          --restart-policy Always \
-          --location ${{ env.AZURE_LOCATION }}
+        --resource-group ${{ env.AZURE_RESOURCE_GROUP }} \
+        --name ${{ env.CONTAINER_NAME }} \
+        --image mlopsincidentacr.azurecr.io/incident-sla-api:latest \
+        --registry-login-server mlopsincidentacr.azurecr.io \
+        --registry-username $ACR_USERNAME \
+        --registry-password $ACR_PASSWORD \
+        --dns-name-label incident-sla-api-${{ github.run_number }} \
+        --ports 8000 \
+        --cpu 1 \
+        --memory 2 \
+        --environment-variables ENVIRONMENT=production \
+        --restart-policy Always \
+        --location ${{ env.AZURE_LOCATION }} \
+        --os-type Linux
+
         
         echo "✅ Container deployed to Azure"
     
